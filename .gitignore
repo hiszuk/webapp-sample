@@ -1,0 +1,6 @@
+/mysql
+/api/gradle
+api/.settings
+
+api/.classpath
+api/.project

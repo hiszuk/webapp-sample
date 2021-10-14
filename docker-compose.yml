@@ -1,0 +1,46 @@
+version: "3"
+services:
+    db:
+        build:
+            context: ./db/
+            dockerfile: Dockerfile
+        image: db:latest
+        volumes:
+            - './mysql:/var/lib/mysql'
+        environment: 
+            MYSQL_ROOT_PASSWORD: mysql
+            MYSQL_DATABASE: sampledb
+            MYSQL_APP_USER: sample
+            MYSQL_APP_PASSWORD: sample
+        ports: 
+            - "${PORT_DB}:3306"
+
+    api:
+        build:
+            context: ./api/
+            dockerfile: Dockerfile
+        image: api:latest
+        depends_on: 
+            - db
+        environment:
+            SPRING_DATASOURCE_URL: 'jdbc:mysql://db:3306/sampledb?useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=JST&useUnicode=true&characterEncoding=utf-8'
+            SPRING_DATASOURCE_USERNAME: sample
+            SPRING_DATASOURCE_PASSWORD: sample
+            SERVER_PORT: 2000
+            GRADLE_USER_HOME : '/home/gradle/project/gradle'
+        ports: 
+            - "${PORT_API}:2000"
+
+    web:
+        build:
+            context: ./web/
+            dockerfile: Dockerfile
+            args:
+                - API_URL=${REST_SRV}:${PORT_API}
+        image: web:latest
+        environment: 
+            API_URL: ${REST_SRV}:${PORT_API}
+        depends_on: 
+            - api
+        ports:  
+            - "${PORT_WEB}:3000"
