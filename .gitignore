@@ -4,3 +4,5 @@ api/.settings
 
 api/.classpath
 api/.project
+
+.env

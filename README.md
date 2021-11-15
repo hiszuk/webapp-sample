@@ -1,8 +1,8 @@
 # WEB アプリ サンプル 構築方法
 
 - [WEB アプリ サンプル 構築方法](#web-アプリ-サンプル-構築方法)
-  - [ビルド](#ビルド)
   - [環境変数ファイル編集](#環境変数ファイル編集)
+  - [ビルド](#ビルド)
   - [起動](#起動)
   - [MySQLが完全に起動するまで待つ](#mysqlが完全に起動するまで待つ)
   - [DB初期登録](#db初期登録)
@@ -10,17 +10,18 @@
     - [2. sampleユーザーを作成](#2-sampleユーザーを作成)
     - [3. データ登録](#3-データ登録)
     - [4. 登録データ確認](#4-登録データ確認)
+    - [5. WEBアプリ動作確認](#5-webアプリ動作確認)
+
+## 環境変数ファイル編集
+
+1. `.env.sample` 内の`REST_SRV`IPアドレスをコンテナ起動マシンのIPアドレスに変更する
+2. `.env.sample` を `.env` にリネームする
 
 ## ビルド
 
 ```
 docker-compose build
 ```
-
-## 環境変数ファイル編集
-
-1. `.env.sample` 内の`REST_SRV`IPアドレスをコンテナ起動マシンのIPアドレスに変更する
-2. `.env.sample` を `.env` にリネームする
 
 ## 起動
 
@@ -44,7 +45,7 @@ db_1   | Version: '5.7.35'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  M
 ### 1. dbコンテナに入る
 
 ```
-docker exec -it WORKDIR_db_1 bash
+docker exec -it webapp-sample_db_1 bash
 ```
 
 ### 2. sampleユーザーを作成
@@ -91,5 +92,21 @@ mysql> select * from items;
 7 rows in set (0.00 sec)
 
 mysql> quit
+```
+
+**mysqlから抜ける**
+
+下記コマンドを投入してmysqlコンテナから抜けます。
+
+```shell
+exit
+```
+
+### 5. WEBアプリ動作確認
+
+次のURLにブラウザからアクセスし、4.で確認したデータが表示されれば動作しています。
+
+```
+http://localhost:3000/items
 ```
 
